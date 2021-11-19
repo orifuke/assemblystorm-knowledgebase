@@ -11,7 +11,13 @@ jobs:
   merge_pr:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout pull request branch on forked repo
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        ref: ${{github.event.pull_request.head.ref}}
+        repository: ${{github.event.pull_request.head.repo.full_name}}
+        token: ${{ github.token }}
     - name: Auto merge pull request
       run: |
         PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
