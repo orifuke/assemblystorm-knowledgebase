@@ -40,7 +40,7 @@ jobs:
 
         set -o xtrace
 
-        git fetch origin $BASE_BRANCH
+        git pull origin $BASE_BRANCH
         git checkout $BASE_BRANCH
 
         # do the merge
