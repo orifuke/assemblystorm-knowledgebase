@@ -21,7 +21,7 @@ jobs:
     - name: Clone pull request
       run: |
         rm -rf target
-        git clone ${{github.event.pull_request.head.repo.full_name}} target
+        git clone https://github.com/${{github.event.pull_request.head.repo.full_name}} target
         cd target
         git checkout ${{github.event.pull_request.head.ref}}
     - name: Auto merge pull request
