@@ -34,7 +34,7 @@ jobs:
         HEAD_BRANCH=$(echo "$pr_resp" | jq -r .head.ref)
         BASE_BRANCH=$(echo "$pr_resp" | jq -r .base.ref)
 
-        git remote set-url origin https://x-access-token:$GITHUB_TOKEN@github.com/$REPO_FULLNAME.git
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$REPO_FULLNAME.git
         git config --global user.email "actions@github.com"
         git config --global user.name "GitHub Merge Action"
 
@@ -45,4 +45,11 @@ jobs:
 
         # do the merge
         git merge $HEAD_BRANCH --no-edit
-        git push origin $BASE_BRANCH
+
+        # GitHub Actions stores a configuration option using one of the http.extraheader options to send the 
+        # original token for cloning your repository in a custom Authorization header. This is a bad idea 
+        # because it then conflicts with the Authorization header added by Git when you use another repository, 
+        # and the token that's issued is only valid for the original repository.
+        git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
+        git push --force origin main:main
+
