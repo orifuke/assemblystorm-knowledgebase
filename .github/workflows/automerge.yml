@@ -26,6 +26,7 @@ jobs:
         git checkout ${{github.event.pull_request.head.ref}}
     - name: Auto merge pull request
       run: |
+        cd target
         PR_NUMBER=$(jq -r ".number" "$GITHUB_EVENT_PATH")
         REPO_FULLNAME=$(jq -r ".repository.full_name" "$GITHUB_EVENT_PATH")
         echo "Collecting information about PR #$PR_NUMBER of $REPO_FULLNAME"
